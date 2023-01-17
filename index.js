@@ -49,8 +49,37 @@ function rm_pos(letter, number){
     return columns[letter]
 } //
 
+function nextTo(s1, s2) {
+  if (columns[s1].length < columns[s2].length) {
+    let a_set = new Set()
+    for (let i = 0; i < columns[s1].length; i++) {
+      if (columns[s1][i] + 1 <= 4) {
+        a_set.add(columns[s1][i] + 1)
+      }
+      if (columns[s1][i] - 1 >= 0) {
+        a_set.add(columns[s1][i] - 1)
+      }
+    }
+    let an_array = columns[s2].filter(x => a_set.has(x))
+    columns[s2] = an_array
+  }
+  else if ((columns[s1].length > columns[s2].length)) {
+    let a_set = new Set()
+    for (let i = 0; i < columns[s2].length; i++) {
+      if (columns[s2][i] + 1 <= 4) {
+        a_set.add(columns[s2][i] + 1)
+      }
+      if (columns[s2][i] - 1 >= 0) {
+        a_set.add(columns[s2][i] - 1)
+      }
+    }
+    let an_array = columns[s1].filter(x => a_set.has(x))
+    columns[s1] = an_array
+  }
+}
 function leftOf(s1, s3){
-    
+    rm_pos(s3, 0)
+    rm_pos(s1, 4)
 }
 function sameColumn(s1 , s3){
     if (columns[s1].length > columns[s3].length){
@@ -77,12 +106,14 @@ function clue_reader(clue){
     let s2 = clue[1]
     let s3 = clue[2]
     
-    if(s2 == "<"){
+    if((s2 == "<") && (s1 != s3)){
         leftOf(s1 , s3)
     }else if((s2 == "^") && (rows[s1] != rows[s3])){
         sameColumn(s1, s3)
     }else if((s1 in columns && s2 in columns && s3 in columns) && ((s1 != s3) && (s2 != s3) && (s2 != s1))){
         between(s1, s2, s3)
+    }else if((s1 === s3) && (s1 != s2) && (rows[s1] != rows[s2])){
+        nextTo(s1, s2)
     }
 }
 function puzzle(clues){
@@ -95,8 +126,3 @@ function puzzle(clues){
 
 puzzle(clues)
 console.log(columns)
-
-//console.log(columns["M"])
-//console.log(columns["P"])
-//console.log(columns["J"])
-//console.log(columns["A"])

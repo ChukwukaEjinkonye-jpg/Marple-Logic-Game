@@ -1,0 +1,95 @@
+For each clue there are 3 symbols ( s1 , s2 , s3 )
+Each clue runs a different clue function that filters down the potential position each letter could be 
+
+"BETWEEN" clue 
+- This clue runs if these conditions are true
+	> All symbols are letters and are unique (s1 ==! s2 ==! s3) , none of the three unique symbols are on the same column (when 2 or more letters has only one potential value and they are the same)
+- When this clue function runs, the middle symbol (s2) cant be on either ends of the row. Remove 0, 4 from s2's list of position
+- When it is determined that s1 is either on the right or left side of s2, s3 will automically take the other side.
+	> Right Trigger: If all the values of either s1 or s3 are greater than or equal to the lowest value of s2
+        > Left Trigger : If all the values of either s1 or s3 are less than or equal to the greatest value of s2.
+- When a symbol(a) is detected by Right Trigger, s2[0] (s2's lowest value) is removed from the detected symbol(a) and values from the other symbol(b) are removed, starting from the greatest, until all values that remain are less than s2's greatest possible value.
+- When a symbol(a) is detected by Left Trigger, s2[s2.length-1] (s2's greatest value) is removed from the detected symbol(a) and values from the other symbol(b) are removed, starting from the fewest, until all values that remain are greater than s2's greatest possible value.      
+- When s2's values are filtered to one potential value, remove that value from s1 and s3.
+- When s2's lowest value are the same as s1 and s3's lowest value (s2[0] == s1[0] && s2[0] == s3[0]), remove that value from s2's values. 
+- When s2's greatest value are the same as s1 and s3's greatest value (s2[s2.length-1] == s1[s1.length-1] && s2[s2.length-1] == s3[s3.length-1]), remove that value from s2's values  
+
+
+"SAME COLUMN" clue
+- This clue runs if these conditions are true
+	> s1 and s3 are letters and unique (s1 ==! s3) , s2 is a specific symbol calling for the clue (s2 === "^"), s1 and s3 are NOT on the same row
+- When this clue runs, s1 and s3 will constantly have the same values. Both will match the letter that has the least values
+
+
+"LEFT OF" clue
+- This clue runs if these conditions are true
+	> s1 and s3 are letters and unique (s1 ==! s3) , s2 is a specific symbol calling for the clue (s2 === "<"), s1 and s3 are NOT on the same column
+- This clue automatically sets off the Left Trigger (see "BETWEEN" clue).
+	>s3[s3.length-1] (s3's greatest value) and any value greater than that, is removed from s1's values
+	>s1[0] (s1's lowest value) and any value less than that, is removed from s3's values 
+
+"NEXT TO" clue
+- This clue runs if these conditions are true
+	> s1 and s3 are letters and are the same (s1 === s3), s2 is a letter and is unique to either s1 and s3 (s1 ==! s2 , s3 ==! s2), s2 is NOT on the same column as either s1 or s3. Note: treat them as one letter 
+- Filter down the symbol with the greater number of potential positions 
+    > if s1 has a greater number filter out any positions that arent 1 greater or 1 less than s3's positions
+    > if s3 has a greater number filter out any positions that arent 1 greater or 1 less than s1's positions
+
+
+BONUS FEATURE 
+- If any letter has been filtered down to one potential position, that position is immediately removed from all other letters in the same row.
+
+Patch Notes: 
+Fix the algorithm for "BETWEEN" clue and "NEXT TO" clue
+
+
+BETWEEN     - bt 
+SAME COLUMN - sc
+LEFT OF     - lo 
+NEXT TO     - nt
+
+Trial #1
+
+A : ( 1 , 2 , 3 ) #7 - bt
+B : ( 1 , 2 , 3 ) #1 - bt
+C : ( 0 , 1 , 2 , 3 , 4 )
+D : ( 1 , 2 ) #6 - bt , #11 - lo
+E : ( 0 , 1 , 2 , 3 , 4 )
+
+F : ( 0 , 1 , 2 , 3 , 4 )
+G : ( 0 , 1 , 2 , 3 , 4 )
+H : ( 0 , 1 , 2 , 3 , 4 )
+I : ( 1 , 2 , 3 ) #4 - bt
+J : ( 1 , 2 , 3 ) #8 - sc
+
+K : ( 2 , 3 ) #2 - bt , #11 - lo
+L : ( 0 , 1 , 2 , 3 , 4 )
+M : ( 1 , 2 , 3 ) #9 - sc
+N : ( 0 , 1 , 2 , 3 , 4 )
+O : ( 1 , 2 , 3 , 4 ) #12 - nt
+
+P : ( 1 , 2 , 3 ) #5 - bt
+Q : ( 2 , 3 , 4 ) #10 - lo
+R : ( 1 , 2 , 3 ) #0 - bt
+S : ( 0 , 1 , 2 , 3 , 4 )
+T : ( 0 , 1 , 2 , 3 , 4 )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
