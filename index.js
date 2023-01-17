@@ -1,4 +1,5 @@
-let grid = {
+let clues = ["MRT", "ABH", "LKO", "OKP", "JIM", "OPE", "GDO", "RAQ", "J^A", "M^P", "A<Q", "D<K", "OQO"]
+let columns = {
     "A": [0, 1, 2, 3, 4],
     "B": [0, 1, 2, 3, 4],
     "C": [0, 1, 2, 3, 4],
@@ -20,7 +21,7 @@ let grid = {
     "S": [0, 1, 2, 3, 4],
     "T": [0, 1, 2, 3, 4]
 } //
-let column = {
+let rows = {
     "A" : 0,
     "B" : 0,
     "C" : 0,
@@ -44,12 +45,58 @@ let column = {
 } //
 
 function rm_pos(letter, number){
-    if(grid[letter].indexOf(number) !== -1){grid[letter].splice(grid[letter].indexOf(number) , 1)}
-    return grid[letter]
+    if(columns[letter].indexOf(number) !== -1){columns[letter].splice(columns[letter].indexOf(number) , 1)}
+    return columns[letter]
 } //
 
+function leftOf(s1, s3){
+    
+}
+function sameColumn(s1 , s3){
+    if (columns[s1].length > columns[s3].length){
+        columns[s1] = columns[s3]
+    }else if (columns[s3].length > columns[s1].length){
+        columns[s3] = columns[s1]
+    }
+}
+function between(s1, s2, s3){
+    rm_pos(s2, 0)
+    rm_pos(s2, 4)
+    
+}
 
-console.log(grid["A"])
-console.log(rm_pos("A" , 0))
-console.log(rm_pos("A" , 4))
-console.log(rm_pos("A", 5))
+function total(columns){
+    let sum = 0
+    for (const x in columns) {
+        sum += columns[x].length;
+    }
+    return sum
+}
+function clue_reader(clue){
+    let s1 = clue[0]
+    let s2 = clue[1]
+    let s3 = clue[2]
+    
+    if(s2 == "<"){
+        leftOf(s1 , s3)
+    }else if((s2 == "^") && (rows[s1] != rows[s3])){
+        sameColumn(s1, s3)
+    }else if((s1 in columns && s2 in columns && s3 in columns) && ((s1 != s3) && (s2 != s3) && (s2 != s1))){
+        between(s1, s2, s3)
+    }
+}
+function puzzle(clues){
+    for(let i = 0 ; i < clues.length; i++){
+        clue_reader(clues[i])
+    }
+    console.log(total(columns))
+    
+}
+
+puzzle(clues)
+console.log(columns)
+
+//console.log(columns["M"])
+//console.log(columns["P"])
+//console.log(columns["J"])
+//console.log(columns["A"])
