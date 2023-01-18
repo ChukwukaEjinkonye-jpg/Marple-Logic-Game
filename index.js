@@ -48,6 +48,27 @@ function rm_pos(letter, number){
     if(columns[letter].indexOf(number) !== -1){columns[letter].splice(columns[letter].indexOf(number) , 1)}
     return columns[letter]
 } //
+function limit(){
+    for(let i = 0; i < 4; i++ ){
+        for(let x in columns){
+            if(columns[x].length == 1){
+                for(let y in rows){
+                    if((x != y) && (rows[x] == rows[y])){
+                        rm_pos(y , columns[x][0])
+                    }
+                }
+            }
+        }
+    }
+}
+function total(columns){
+    let sum = 0
+    for (const x in columns) {
+        sum += columns[x].length;
+    }
+    return sum
+}
+
 
 function nextTo(s1, s2) {
   if (columns[s1].length < columns[s2].length) {
@@ -86,43 +107,30 @@ function leftOf(s1, s3){
   columns[s1] = left
 }
 function sameColumn(s1 , s3){
-    if (columns[s1].length > columns[s3].length){
-        columns[s1] = columns[s3]
-    }else if (columns[s3].length > columns[s1].length){
-        columns[s3] = columns[s1]
-    }
+    // if (columns[s1].length > columns[s3].length){
+    //     columns[s1] = columns[s3]
+    // }else if (columns[s3].length > columns[s1].length){
+    //     columns[s3] = columns[s1]
+    // }
+    const intersection = columns[s1].filter(x => columns[s3].includes(x));
+    columns[s1] = intersection
+    columns[s3] = intersection
+    
 }
 function between(s1, s2, s3){
     rm_pos(s2, 0)
     rm_pos(s2, 4)
     
-    if((columns[s1][0] == columns[s2][0]) && (columns[s2][0] == columns[s3][0])){
-      rm_pos(s2, columns[s2][0])
+    if((columns[s1][0] >= columns[s2][0]) && (columns[s2][0] <= columns[s3][0])){
+        rm_pos(s2, columns[s2][0])
     }
-    if((columns[s1][columns[s1].length - 1] == columns[s2][columns[s2].length - 1]) && (columns[s2][columns[s2].length - 1] == columns[s3][columns[s3].length - 1])){
-      rm_pos(s2, columns[s2][columns[s2].length - 1])
+    if((columns[s1][columns[s1].length - 1] <= columns[s2][columns[s2].length - 1]) && (columns[s2][columns[s2].length - 1] >= columns[s3][columns[s3].length - 1])){
+        rm_pos(s2, columns[s2][columns[s2].length - 1])
     }
     
 }
 
-function limit(){
-    for(let x in columns){
-        if(columns[x].length == 1){
-            for(let y in rows){
-                if((x != y) && (rows[x] == rows[y])){
-                    rm_pos(y , columns[x][0])
-                }
-            }
-        }
-    }
-}
-function total(columns){
-    let sum = 0
-    for (const x in columns) {
-        sum += columns[x].length;
-    }
-    return sum
-}
+
 function clue_reader(clue){
     let s1 = clue[0]
     let s2 = clue[1]
@@ -147,7 +155,8 @@ function puzzle(clues){
     
 }
 
-for(let i = 0; i < 2; i++){
-    puzzle(clues)
-}
+
+puzzle(clues)
+console.log(columns)
+puzzle(clues)
 console.log(columns)
