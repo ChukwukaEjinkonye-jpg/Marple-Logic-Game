@@ -78,8 +78,12 @@ function nextTo(s1, s2) {
   }
 }
 function leftOf(s1, s3){
-    rm_pos(s3, 0)
-    rm_pos(s1, 4)
+  let lowest = columns[s1][0]  
+  let greatest = columns[s3][columns[s3].length - 1] 
+  let right = columns[s3].filter(x => x > lowest)
+  let left = columns[s1].filter(x => x < greatest)
+  columns[s3] = right
+  columns[s1] = left
 }
 function sameColumn(s1 , s3){
     if (columns[s1].length > columns[s3].length){
@@ -92,8 +96,26 @@ function between(s1, s2, s3){
     rm_pos(s2, 0)
     rm_pos(s2, 4)
     
+    if((columns[s1][0] == columns[s2][0]) && (columns[s2][0] == columns[s3][0])){
+      rm_pos(s2, columns[s2][0])
+    }
+    if((columns[s1][columns[s1].length - 1] == columns[s2][columns[s2].length - 1]) && (columns[s2][columns[s2].length - 1] == columns[s3][columns[s3].length - 1])){
+      rm_pos(s2, columns[s2][columns[s2].length - 1])
+    }
+    
 }
 
+function limit(){
+    for(let x in columns){
+        if(columns[x].length == 1){
+            for(let y in rows){
+                if((x != y) && (rows[x] == rows[y])){
+                    rm_pos(y , columns[x][0])
+                }
+            }
+        }
+    }
+}
 function total(columns){
     let sum = 0
     for (const x in columns) {
@@ -119,10 +141,13 @@ function clue_reader(clue){
 function puzzle(clues){
     for(let i = 0 ; i < clues.length; i++){
         clue_reader(clues[i])
+        limit()
     }
     console.log(total(columns))
     
 }
 
-puzzle(clues)
+for(let i = 0; i < 2; i++){
+    puzzle(clues)
+}
 console.log(columns)
