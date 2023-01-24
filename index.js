@@ -107,27 +107,62 @@ function leftOf(s1, s3){
   columns[s1] = left
 }
 function sameColumn(s1 , s3){
-    // if (columns[s1].length > columns[s3].length){
-    //     columns[s1] = columns[s3]
-    // }else if (columns[s3].length > columns[s1].length){
-    //     columns[s3] = columns[s1]
-    // }
     const intersection = columns[s1].filter(x => columns[s3].includes(x));
     columns[s1] = intersection
     columns[s3] = intersection
     
 }
 function between(s1, s2, s3){
-    rm_pos(s2, 0)
-    rm_pos(s2, 4)
+    // rm_pos(s2, 0)
+    // rm_pos(s2, 4)
     
-    if((columns[s1][0] >= columns[s2][0]) && (columns[s2][0] <= columns[s3][0])){
-        rm_pos(s2, columns[s2][0])
+    // if((columns[s1][0] >= columns[s2][0]) && (columns[s2][0] <= columns[s3][0])){
+    //     rm_pos(s2, columns[s2][0])
+    // }
+    // if((columns[s1][columns[s1].length - 1] <= columns[s2][columns[s2].length - 1]) && (columns[s2][columns[s2].length - 1] >= columns[s3][columns[s3].length - 1])){
+    //     rm_pos(s2, columns[s2][columns[s2].length - 1])
+    // }
+    let left_to_right = false
+    let right_to_left = false
+    let remove = []
+    for(let i = 0; i < columns[s2].length;i++){
+        let l_t_r = true 
+        let r_t_l = true
+        const greater = (x) => x > columns[s2][i];
+        const lesser = (x) => x < columns[s2][i];
+        if(!(columns[s3].some(greater) && columns[s1].some(lesser))){
+            l_t_r = false
+        }
+        if(!(columns[s1].some(greater) && columns[s3].some(lesser))){
+            r_t_l = false
+        }
+        if(columns[s3].some(greater) && columns[s1].some(lesser)){
+            left_to_right = true
+        }
+        if(columns[s1].some(greater) && columns[s3].some(lesser)){
+            right_to_left = true
+        }
+        if((l_t_r == false) && (r_t_l == false)){
+            remove.push(columns[s2][i])
+        }
     }
-    if((columns[s1][columns[s1].length - 1] <= columns[s2][columns[s2].length - 1]) && (columns[s2][columns[s2].length - 1] >= columns[s3][columns[s3].length - 1])){
-        rm_pos(s2, columns[s2][columns[s2].length - 1])
+    for(let i = 0; i < remove.length;i++){
+        rm_pos(s2, remove[i])
     }
     
+    if((left_to_right == true) && (right_to_left == false)){
+        //console.log("left to right")
+        columns[s1] = columns[s1].filter(x => x < columns[s2][columns[s2].length - 1])
+        columns[s3] = columns[s3].filter(x => x > columns[s2][0])
+    }else if((right_to_left == true) && (left_to_right == false)){
+        //console.log("right to left")
+        columns[s1] = columns[s1].filter(x => x > columns[s2][0])
+        columns[s3] = columns[s3].filter(x => x < columns[s2][columns[s2].length - 1])
+    }else if((left_to_right == false) && (right_to_left == false)){
+        //console.log("your code has failed")
+    }else if((left_to_right == true) && (right_to_left == true)){
+        //console.log("could be both")
+    }
 }
 
 
@@ -160,3 +195,37 @@ puzzle(clues)
 console.log(columns)
 puzzle(clues)
 console.log(columns)
+puzzle(clues)
+console.log(columns)
+puzzle(clues)
+console.log(columns)
+puzzle(clues)
+console.log(columns)
+
+// clue_reader("MRT")
+// limit()
+// clue_reader("ABH")
+// limit()
+// clue_reader("LKO")
+// limit()
+// clue_reader("OKP")
+// limit()
+// clue_reader("JIM")
+// limit()
+// clue_reader("OPE")
+// limit()
+// clue_reader("GDO")
+// limit()
+// clue_reader("RAQ")
+// limit()
+// clue_reader("J^A")
+// limit()
+// clue_reader("M^P")
+// limit()
+// clue_reader("A<Q")
+// limit()
+// clue_reader("D<K")
+// limit()
+// clue_reader("OQO")
+// limit()
+// console.log(total(columns))
