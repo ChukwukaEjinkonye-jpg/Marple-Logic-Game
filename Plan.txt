@@ -14,6 +14,8 @@ Each clue runs a different clue function that filters down the potential positio
 - When s2's lowest value are the same as s1 and s3's lowest value (s2[0] == s1[0] && s2[0] == s3[0]), remove that value from s2's values. 
 - When s2's greatest value are the same as s1 and s3's greatest value (s2[s2.length-1] == s1[s1.length-1] && s2[s2.length-1] == s3[s3.length-1]), remove that value from s2's values  
 
+	> Update:
+- 
 
 "SAME COLUMN" clue
 - This clue runs if these conditions are true
@@ -43,10 +45,13 @@ Patch Notes:
 Fix the algorithm for "BETWEEN" clue and "NEXT TO" clue
 
 
+
 BETWEEN     - bt 
 SAME COLUMN - sc
 LEFT OF     - lo 
 NEXT TO     - nt
+
+Clue #1 
 
 Trial #1
 
@@ -155,6 +160,34 @@ R : ( 2 )
 S : ( 0 )
 T : ( 3 ) 
 
+
+Clue #3 
+
+Trial #1 
+
+A : ( 0 , 1 , 2 , 3 , 4 ) 
+B : ( 1 , 2 , 3 ) #1 -bt
+C : ( 0 , 1 , 2 , 3 , 4 )
+D : ( 1 , 2 , 3 ) #2 - bt
+E : ( 0 , 1 , 2 , 3 , 4 )
+
+F : ( 0 , 1 , 2 , 3 , 4 )
+G : ( 0 , 1 , 2 , 3 , 4 )
+H : ( 1 , 2 , 3 ) #3 - bt
+I : ( 0 , 1 , 2 , 3 , 4 )
+J : ( 0 , 1 , 2 , 3 , 4 )
+
+K : ( 0 , 1 , 2 , 3 , 4 )
+L : ( 0 , 1 , 2 , 3 , 4 )
+M : ( 1 , 2 , 3 ) #6 - bt
+N : ( 1 , 2 , 3 ) #5 - bt
+O : ( 1 , 2 , 3 ) #4 - bt
+
+P : ( 0 , 1 , 2 , 3 ) #9 - lt 
+Q : ( 1 , 2 , 3 , 4 ) #9 - lt
+R : ( 0 , 1 , 2 , 3 , 4 )
+S : ( 0 , 1 , 2 , 3 , 4 )
+T : ( 1 , 2 , 3 ) #7 - bt
 
 
 

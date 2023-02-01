@@ -3,6 +3,13 @@ let clues2 = ["KLA", "JAB", "FJH", "CMF", "AQT", "GBN", "MAF", "Q^B", "J^E", "R^
 let clues3 = ["PBJ", "KDO", "DHG", "AOR", "INM", "EMB", "GTD", "O^T", "P<Q", "T<P", "A<L", "P<F", "RIR", "IDI"]
 let clues4 = ["EMJ", "DJO", "AMN", "ADC", "CIL", "END", "GQS", "SAB", "Q<B", "RPR", "SAS", "FNF", "NPN", "SCS"]
 let clues5 = ["LCI", "CQH", "NOF", "AEC", "APG", "NGL", "EQB", "F^P", "M^S", "E<J", "B<F", "T<P", "F<A", "P<K", "S<Q", "LCL"]
+
+let row1 = { 0: ["A", "B", "C", "D", "E"], 1: ["A", "B", "C", "D", "E"], 2: ["A", "B", "C", "D", "E"], 3: ["A", "B", "C", "D", "E"], 4: ["A", "B", "C", "D", "E"]}
+let row2 = { 0: ["F", "G", "H", "I", "J"], 1: ["F", "G", "H", "I", "J"], 2: ["F", "G", "H", "I", "J"], 3: ["F", "G", "H", "I", "J"], 4: ["F", "G", "H", "I", "J"]}
+let row3 = { 0: ["K", "L", "M", "N", "O"], 1: ["K", "L", "M", "N", "O"], 2: ["K", "L", "M", "N", "O"], 3: ["K", "L", "M", "N", "O"], 4: ["K", "L", "M", "N", "O"]}
+let row4 = { 0: ["P", "Q", "R", "S", "T"], 1: ["P", "Q", "R", "S", "T"], 2: ["P", "Q", "R", "S", "T"], 3: ["P", "Q", "R", "S", "T"], 4: ["P", "Q", "R", "S", "T"]}
+let grid = [row1 , row2, row3, row4]
+
 let columns = {
     "A": [0, 1, 2, 3, 4],
     "B": [0, 1, 2, 3, 4],
@@ -24,7 +31,7 @@ let columns = {
     "R": [0, 1, 2, 3, 4],
     "S": [0, 1, 2, 3, 4],
     "T": [0, 1, 2, 3, 4]
-} //
+} 
 let rows = {
     "A": 0,
     "B": 0,
@@ -46,15 +53,26 @@ let rows = {
     "R": 3,
     "S": 3,
     "T": 3,
-} //
+} 
 
 function solve(clues , columns , rows){
-    // let fcolumns = columns
-    // let frows = rows
+    
     function rm_pos(letter, number) {
-        if (columns[letter].indexOf(number) !== -1) { columns[letter].splice(columns[letter].indexOf(number), 1) }
-        return columns[letter]
-    } //
+        if (columns[letter].indexOf(number) !== -1) {
+            columns[letter].splice(columns[letter].indexOf(number), 1)
+            
+        }
+        
+        if(/[A-E]/.test(letter)){
+            if(row1[number].indexOf(letter) !== -1) { row1[number].splice(row1[number].indexOf(letter), 1)}
+        }else if(/[F-J]/.test(letter)){
+            if(row2[number].indexOf(letter) !== -1) { row2[number].splice(row2[number].indexOf(letter), 1)}
+        }else if(/[K-O]/.test(letter)){
+            if(row3[number].indexOf(letter) !== -1) { row3[number].splice(row3[number].indexOf(letter), 1)}
+        }else if(/[P-T]/.test(letter)){
+            if(row4[number].indexOf(letter) !== -1) { row4[number].splice(row4[number].indexOf(letter), 1)}
+        }
+    }
     function limit() {
         for (let i = 0; i < 4; i++) {
             for (let x in columns) {
@@ -67,6 +85,29 @@ function solve(clues , columns , rows){
                 }
             }
         }
+        for (let i = 0; i < grid.length; i++){
+            for (let x in grid[i]){
+              if(grid[i][x].length == 1){
+                  for(let y in grid[i]){
+                      if(x != y){
+                        rm_pos(grid[i][x][0] , Number(y))
+                      }
+                  }
+              }else if(grid[i][x].length == 2){
+                    for(let y in grid[i]){
+                        if((x !=y) && ((grid[i][y].length == 2) && ((grid[i][y][0] == grid[i][x][0]) && (grid[i][y][1] == grid[i][x][1])))){
+                            for(let z in grid[i]){
+                                if((z != x) && (z != y)){
+                                    rm_pos(grid[i][x][0], Number(z))
+                                    rm_pos(grid[i][x][1], Number(z))
+                                }
+                            }
+                        }    
+                    }
+              }
+            }
+        }
+        
     }
     function total(columns) {
         let sum = 0
